@@ -1,0 +1,28 @@
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12 col-md-8 col-lg-5 px-5 px-sm-0 mx-auto">
+      <h1 class="mt-3">Editing Book</h1>
+        <% if session[:error].present? %>
+          <div id="error_explanation">
+            <h2 class="text-danger mt-3"> <%= session[:error].count %> errors prohibited this obj from being saved:</h2>
+            <ul class="errors">
+              <% session[:error].each do |e| %>
+                <li class="text-danger"><%= e %></li>
+              <% end %>
+            </ul>
+            <% session[:error] = nil # 念のため使い終わったら消す %>
+          </div>
+        <% end %>
+        <%= form_with model:@book, local:true do |f| %>
+          <p class="mt-3 mb-1">Title</p>
+          <%= f.text_field :title, autofocus: true, id:"inputTitle"%>
+          <p class="mt-3 mb-1">Opinion</p>
+          <div>
+            <%= f.text_area :body, autofocus: true, id:"inputOpinion"%>
+          </div>
+          <%= f.submit "Update Book", class:"btn btn-success my-3" %>
+        <% end %>
+        <%= link_to "Show", book_path(@book.id) %> | <%= link_to "Back", books_path %>
+    </div>
+  </div>
+</div>

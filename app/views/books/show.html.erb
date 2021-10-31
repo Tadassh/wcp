@@ -1,0 +1,53 @@
+<div class="container px-5 px-sm-0 mt-3">
+  <% if session[:error].present? %>
+    <div id="error_explanation">
+      <h2 class="text-danger mt-3"> <%= session[:error].count %> errors prohibited this obj from being saved:</h2>
+      <ul class="errors">
+        <% session[:error].each do |e| %>
+          <li class="text-danger"><%= e %></li>
+        <% end %>
+      </ul>
+      <% session[:error] = nil # 念のため使い終わったら消す %>
+    </div>
+  <% end %>
+  <div class="row">
+    <div class="col">
+      <%= render 'users/user_info', user: @user %>
+      <%= render 'books/new_book', book: @new_book %>
+    </div>
+    <div class="col-md-8 offset-md-1">
+      <h2>Book detail</h2>
+      <div>
+        <table class="w-100">
+            <tr class="border-top">
+              <td class="py-2">
+                <%= link_to user_path(@user) do %>
+                  <span><%= attachment_image_tag @user, :profile_image, :fill, 60, 60, fallback: "no_image.jpg", size:'50x50'%></span>
+                  <br>
+                  <span><%= @user.name %></span>
+                <% end %>
+              </td>
+              <td>
+                <%= link_to book_path(@book.id) do %>
+                  <span><%= @book.title %></span>
+                <% end %>
+              </td>
+              <td>
+                <span><%= @book.body %></span>
+              </td>
+              <td>
+                <% if @book.user == current_user %>
+                  <%= link_to "Edit", edit_book_path(@book), class:"btn btn-sm bg-success text-white"%>
+                <% end %>
+              </td>
+              <td>
+                <% if @book.user == current_user %>
+                  <%= link_to "Destroy", book_path(@book), method: :delete, class:"btn btn-sm btn-danger", data: { confirm: "本当に削除しますか？" } %>
+                <% end %>
+              </td>
+            </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

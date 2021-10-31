@@ -1,0 +1,50 @@
+<div class="container px-5 px-sm-0 mt-3">
+  <% if session[:error].present? %>
+    <div id="error_explanation">
+      <h2 class="text-danger mt-3"> <%= session[:error].count %> errors prohibited this obj from being saved:</h2>
+      <ul class="errors">
+        <% session[:error].each do |e| %>
+          <li class="text-danger"><%= e %></li>
+        <% end %>
+      </ul>
+      <% session[:error] = nil # 念のため使い終わったら消す %>
+    </div>
+  <% end %>
+  <div class="row">
+    <div class="col">
+      <%= render 'users/user_info', user: @user %>
+      <%= render 'books/new_book', book: @book %>
+    </div>
+    <div class="col-md-8 offset-md-1">
+      <h2>Books</h2>
+      <div>
+        <table class="w-100">
+          <thead>
+            <tr class="border-top">
+              <th class="py-2"></th>
+              <th class="py-2">Title</th>
+              <th>Opinion</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @books.each do |book| %>
+            <tr class="border-top">
+              <td class="py-2">
+                <span><%= attachment_image_tag @user, :profile_image, :fill, 60, 60, fallback: "no_image.jpg", size:'50x50' %></span>
+              </td>
+              <td>
+                <%= link_to book_path(book.id) do %>
+                  <span><%= book.title %></span>
+                <% end %>
+              </td>
+              <td class="py-2">
+                <span><%= book.body %></span>
+              </td>
+            </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

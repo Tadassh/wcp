@@ -1,0 +1,8 @@
+<h2 class="mt-3">New book</h1>
+<%= form_with model: book, local:true do |f| %>
+  <p class="mt-3 mb-1">Title</p>
+    <%= f.text_field :title %>
+  <p class="mt-3 mb-1">Opinion</p>
+    <%= f.text_area :body %>
+    <%= f.submit 'Create Book', class:"btn btn-success mt-3" %>
+<% end %>
