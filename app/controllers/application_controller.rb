@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
-  before_action :authenticate_user!,except: [:top]
+  #before_action :authenticate_user!,except: [:top, :about]
+  protect_from_forgery with: :exception
 
   before_action :configure_permitted_parameters, if: :devise_controller?
 
@@ -9,10 +10,19 @@ class ApplicationController < ActionController::Base
     user_path(@user.id)
   end
 
+  def after_sign_up_path_for(resource)
+    @user = User.find(current_user.id)
+    flash[:notice] = "You have signed in successfully."
+    user_path(@user.id)
+  end
+
 
   protected
 
   def configure_permitted_parameters
-    devise_parameter_sanitizer.permit(:sign_up, keys: [:name])
+    added_attrs = [:user_name, :email, :password, :password_confirmation, :remember_me]
+    devise_parameter_sanitizer.permit(:sign_in, keys: [:name])
+    devise_parameter_sanitizer.permit(:sign_up, keys: added_attrs)
+    devise_parameter_sanitizer.permit(:account_update, keys: added_attrs)
   end
 end

@@ -1,4 +1,6 @@
 class BooksController < ApplicationController
+  before_action :authenticate_user!
+
   def new
     @book = Book.new
   end
@@ -18,6 +20,7 @@ class BooksController < ApplicationController
   def index
     @book = Book.new
     @books = Book.all
+    @users = User.all
     @user = User.find(current_user.id)
   end
 
@@ -29,6 +32,9 @@ class BooksController < ApplicationController
 
   def edit
     @book = Book.find(params[:id])
+    if @book.user_id != current_user.id
+      redirect_to books_path
+    end
   end
 
   def update
@@ -38,7 +44,7 @@ class BooksController < ApplicationController
       redirect_to book_path(@book.id)
     else
       session[:error] = @book.errors.full_messages
-      redirect_back(fallback_location: root_path)
+      render action: :edit
     end
   end
 
